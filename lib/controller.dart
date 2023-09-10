@@ -68,15 +68,26 @@ class CreatePdfController extends GetxController {
         await File(finalFiles[0].path).copy(filePath);
         return filePath;
       } else {
-        await Permission.storage.request().then((value) async {
-          if (value.isGranted) {
-            final filePath = '$directory/${fileNameController.text}.pdf';
-            await File(finalFiles[0].path).copy(filePath);
-            return filePath;
-          } else {
-            return null;
-          }
-        });
+        print("here");
+        // final status = await Permission.manageExternalStorage.request();
+        // if (status.isDenied || status.isPermanentlyDenied || status.isRestricted) {
+        //   return null;
+        // } else {
+        //   final filePath = '$directory/${fileNameController.text}.pdf';
+        //   await File(finalFiles[0].path).copy(filePath);
+        //   return filePath;
+        // }
+
+        final status = await Permission.manageExternalStorage.request();
+        // await Permission.storage.request().then((value) async {
+        if (status.isDenied || status.isPermanentlyDenied || status.isRestricted) {
+          return null;
+        } else {
+          final filePath = '$directory/${fileNameController.text}.pdf';
+          await File(finalFiles[0].path).copy(filePath);
+          return filePath;
+        }
+        // });
       }
     } catch (e) {
       print(e);
