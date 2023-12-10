@@ -46,6 +46,7 @@ class CreatePdfController extends GetxController {
     ImagePicker imagePicker = ImagePicker();
     List<XFile> files = await imagePicker.pickMultiImage();
     for (var item in files) {
+      print(item.path);
       _files.add(File(item.path));
     }
   }
